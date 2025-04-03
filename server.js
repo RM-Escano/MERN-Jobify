@@ -6,7 +6,8 @@ import morgan from "morgan"; //Logs on terminal
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
-
+import helmet from "helmet";
+import mongoSanitize from "express-mongo-sanitize";
 //local import
 import jobRouter from "./routes/jobRouter.js";
 import authRouter from "./routes/authRouter.js";
@@ -37,15 +38,8 @@ if (process.env.NODE_ENV === "development") {
 //Middlewares
 app.use(cookieParser());
 app.use(express.json());
-
-app.post("/api/v1/test", (req, res) => {
-  const { name } = req.body;
-  res.json({ message: `hello ${name}` });
-});
-
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
+app.use(helmet());
+app.use(mongoSanitize());
 
 //Creates local port, PORT value is pre defined at .env
 const port = process.env.PORT || 5100;
